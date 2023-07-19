@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 
 class Trainer(object):
-    def __init__(self, model, optim, device, train_dataloader, val_dataloader, test_dataloader, opt_da=None, discriminator=None,
+    def __init__(self, model, optim, device, train_dataloader, val_dataloader, test_dataloader, train_dataset, val_dataset, test_dataset, opt_da=None, discriminator=None,
                  experiment=None, alpha=1, **config):
         self.model = model
         self.optim = optim
@@ -21,6 +21,9 @@ class Trainer(object):
         self.train_dataloader = train_dataloader
         self.val_dataloader = val_dataloader
         self.test_dataloader = test_dataloader
+        self.train_dataset = train_dataset
+        self.val_dataset = val_dataset
+        self.test = test_dataset
         self.is_da = config["DA"]["USE"]
         self.alpha = alpha
         self.n_class = config["DECODER"]["BINARY"]
@@ -188,6 +191,7 @@ class Trainer(object):
         self.model.train()
         loss_epoch = 0
         num_batches = len(self.train_dataloader)
+        
         for i, (v_d, v_p, labels) in enumerate(tqdm(self.train_dataloader)):
             self.step += 1
             v_d, v_p, labels = v_d.to(self.device), v_p.to(self.device), labels.float().to(self.device)
