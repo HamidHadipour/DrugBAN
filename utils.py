@@ -47,9 +47,9 @@ def set_seed(seed=1000):
 
 
 def graph_collate_func(x):
-    d, p, y = zip(*x)
+    d, sm, p, y = zip(*x)
     d = dgl.batch(d)
-    return d, torch.tensor(np.array(p)), torch.tensor(y)
+    return d,sm, torch.tensor(np.array(p)), torch.tensor(y)
 
 
 def mkdir(path):
